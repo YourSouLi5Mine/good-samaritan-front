@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import './App.css';
-import AppRouter from './AppRouter'
+import React, { Component } from 'react'
+import '../Style/App.css'
+import AppRouter from '../AppRouter'
 
 class App extends Component {
   render() {
@@ -10,8 +10,8 @@ class App extends Component {
           <AppRouter></AppRouter>
         </header>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App
