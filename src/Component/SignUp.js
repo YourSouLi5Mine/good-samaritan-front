@@ -17,7 +17,7 @@ class SignUp extends Component {
         })
         .then((res) => {
           if (Object.keys(res.data).length !== 0 && res.data.constructor === Object) {
-              window.location = "/login"
+              window.location = "/signin"
           } else {
               window.location = "/signin"
           }
