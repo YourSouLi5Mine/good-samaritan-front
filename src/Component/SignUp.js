@@ -1,29 +1,39 @@
 import React, { Component } from "react"
-import { Form, Icon, Input, Button, Typography } from 'antd'
+import { Form, Icon, Input, Button, Typography, notification } from 'antd'
 import '../Style/SignUp.css'
 import axios from 'axios'
 
 const { Title } = Typography
+
+const redirection = () => {
+  window.location = '/signin'
+}
 
 class SignUp extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
     this.validateFields()
       .then((user) => {
-        axios.post('http://localhost:8000/api/v1/users', {
+        axios.post('http://localhost:8000/api/v1/signup', {
           username: user.username,
           email: user.email,
           password: user.password
         })
         .then((res) => {
-          if (Object.keys(res.data).length !== 0 && res.data.constructor === Object) {
-              window.location = "/signin"
-          } else {
-              window.location = "/signin"
-          }
+          notification['success']({
+            message: 'Success',
+            description: 'The user was created!',
+            onClose: redirection
+          })
         })
         .catch(err => {
-          console.log('Error')
+          let res  = JSON.parse(err.request.response)
+          for (const field in res) {
+            notification['error']({
+              message: field.charAt(0).toUpperCase() + field.slice(1),
+              description: res[field]
+            })
+          }
         })
       })
   }
@@ -38,6 +48,7 @@ class SignUp extends Component {
       })
     })
   }
+
 
   render() {
     const { getFieldDecorator } = this.props.form
