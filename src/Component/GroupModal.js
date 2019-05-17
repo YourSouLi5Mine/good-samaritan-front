@@ -9,6 +9,7 @@ const GroupModal = Form.create({ name: 'group_modal' })(
         visible, onCancel, onCreate, form,
       } = this.props;
       const { getFieldDecorator } = form;
+
       return (
         <Modal
           visible={visible}

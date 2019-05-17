@@ -1,28 +1,41 @@
 import React, { Component } from "react"
-import { Form, Icon, Input, Button, Typography } from 'antd'
+import { Form, Icon, Input, Button, Typography, notification } from 'antd'
 import '../Style/SignIn.css'
 import axios from 'axios'
+import moment from 'moment'
 
 const { Title } = Typography
+
+const redirection = () => {
+  window.location = '/feed'
+}
 
 class SignIn extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
     this.validateFields()
       .then((user) => {
-        axios.post('http://localhost:8000/api/v1/login', {
+        axios.post('http://localhost:8000/api/v1/signin', {
           email: user.email,
           password: user.password
         })
         .then((res) => {
-          if (Object.keys(res.data).length !== 0 && res.data.constructor === Object) {
-            window.location = "/feed"
-          } else {
-            window.location = "/signin"
-          }
+          let cookieDate = moment().add(12, 'h').toDate().toString().substring(0, 33)
+          document.cookie = `token=${res.data.token}; expires=${cookieDate}`
+          notification['success']({
+            message: 'Success',
+            description: 'Correct login',
+            onClose: redirection
+          })
         })
         .catch(err => {
-          console.log('Error')
+          let res  = JSON.parse(err.request.response)
+          for (const field in res) {
+            notification['error']({
+              message: field.charAt(0).toUpperCase() + field.slice(1),
+              description: res[field]
+            })
+          }
         })
       })
   }

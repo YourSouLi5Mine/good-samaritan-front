@@ -1,20 +1,20 @@
 import React, { Component } from "react"
 import { Form, Icon, Input, Button, Typography, notification } from 'antd'
-import '../Style/SignUp.css'
+import '../Style/EditUser.css'
 import axios from 'axios'
 
 const { Title } = Typography
 
 const redirection = () => {
-  window.location = '/signin'
+  window.location = '/feed'
 }
 
-class SignUp extends Component {
+class EditUser extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
     this.validateFields()
       .then((user) => {
-        axios.post('http://localhost:8000/api/v1/signup', {
+        axios.put(`http://localhost:8000/api/v1/users?${document.cookie}`, {
           username: user.username,
           email: user.email,
           password: user.password
@@ -22,7 +22,7 @@ class SignUp extends Component {
         .then((res) => {
           notification['success']({
             message: 'Success',
-            description: 'The user was created!',
+            description: 'The user was updated!',
             onClose: redirection
           })
         })
@@ -38,6 +38,9 @@ class SignUp extends Component {
       })
   }
 
+  getUser() {
+  }
+
   validateFields() {
     return new Promise((resolve, reject) => {
       this.props.form.validateFields((err, values) => {
@@ -49,14 +52,39 @@ class SignUp extends Component {
     })
   }
 
+  setInitialValues = () => {
+    const { form } = this.props;
+    axios.get(`http://localhost:8000/api/v1/users/edit?${document.cookie}`)
+    .then((res) => {
+      var res_email = res.data.user.email
+      var res_username = res.data.user.username
+      form.setFieldsValue({
+        email: res_email,
+        username: res_username
+      });
+    })
+    .catch(err => {
+      let res  = JSON.parse(err.request.response)
+      for (const field in res) {
+        notification['error']({
+          message: field.charAt(0).toUpperCase() + field.slice(1),
+          description: res[field]
+        })
+      }
+    })
+  };
+
+  componentDidMount() {
+    this.setInitialValues()
+  }
 
   render() {
     const { getFieldDecorator } = this.props.form
 
     return (
       <div>
-        <Title>Sign Up</Title>
-        <Form onSubmit={this.handleSubmit} className="signup-form">
+        <Title>Edit </Title>
+        <Form onSubmit={this.handleSubmit} className="edit-user-form">
           <Form.Item>
             {getFieldDecorator('email', {
               rules: [{required: true, message: 'Please input an email'}],
@@ -85,6 +113,6 @@ class SignUp extends Component {
   }
 }
 
-const WrappedSignup = Form.create()(SignUp)
+const WrappedEditUser = Form.create()(EditUser)
 
-export default WrappedSignup
+export default WrappedEditUser

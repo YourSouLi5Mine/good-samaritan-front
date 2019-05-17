@@ -4,6 +4,7 @@ import SignUp from './Component/SignUp';
 import SignIn from './Component/SignIn';
 import Feed from './Component/Feed';
 import GroupFeed from './Component/GroupFeed';
+import EditUser from './Component/EditUser';
 
 function AppRouter() {
   return (
@@ -13,6 +14,7 @@ function AppRouter() {
         <Route path="/signin" component={SignIn} />
         <Route path="/feed" component={Feed} />
         <Route path="/groups/:id" component={GroupFeed} />
+        <Route path="/user/edit" component={EditUser} />
       </div>
     </Router>
   );
