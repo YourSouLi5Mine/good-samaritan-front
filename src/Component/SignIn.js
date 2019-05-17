@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Form, Icon, Input, Button, Typography, notification } from 'antd'
+import { Form, Icon, Input, Button, Typography, notification, Row, Col } from 'antd'
 import '../Style/SignIn.css'
 import axios from 'axios'
 import moment from 'moment'
@@ -55,26 +55,28 @@ class SignIn extends Component {
     const { getFieldDecorator } = this.props.form
 
     return (
-      <div>
-        <Title>Sign In</Title>
-        <Form onSubmit={this.handleSubmit} className="signin-form">
-          <Form.Item>
-            {getFieldDecorator('email', {
-              rules: [{required: true, message: 'Please input an email'}],
+      <Row>
+        <Col xs={{span: 20, offset: 2}} md={{span: 4, offset: 10}}>
+          <Title>Sign In</Title>
+          <Form onSubmit={this.handleSubmit} className="signin-form">
+            <Form.Item>
+              {getFieldDecorator('email', {
+                rules: [{required: true, message: 'Please input an email'}],
+                })(
+              <Input prefix={<Icon className="icon" type="mail" />} placeholder="Email" />
+                )}
+            </Form.Item>
+            <Form.Item>
+              {getFieldDecorator('password', {
+                rules: [{ required: true, message: 'Please input your Password!' }],
               })(
-            <Input prefix={<Icon className="icon" type="mail" />} placeholder="Email" />
+                <Input type="password" prefix={<Icon className="icon" type="lock" />} placeholder="Password" />
               )}
-          </Form.Item>
-          <Form.Item>
-            {getFieldDecorator('password', {
-              rules: [{ required: true, message: 'Please input your Password!' }],
-            })(
-              <Input type="password" prefix={<Icon className="icon" type="lock" />} placeholder="Password" />
-            )}
-          </Form.Item>
-          <Button htmlType="submit">Submit</Button>
-        </Form>
-      </div>
+            </Form.Item>
+            <Button htmlType="submit">Submit</Button>
+          </Form>
+        </Col>
+      </Row>
     )
   }
 }
