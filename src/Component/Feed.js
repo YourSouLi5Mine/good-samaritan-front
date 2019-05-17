@@ -77,10 +77,15 @@ class Feed extends Component {
     this.formRef = formRef;
   }
 
+  editUser() {
+    window.location = 'user/edit';
+  }
+
   render() {
     return (
       <div>
         <Button type="primary" size="large" block onClick={this.showModal}>Create Group</Button>
+        <Button type="primary" size="large" block onClick={this.editUser}>Edit User</Button>
         <GroupModal
           wrappedComponentRef={this.saveFormRef}
           visible={this.state.modalVisible}
