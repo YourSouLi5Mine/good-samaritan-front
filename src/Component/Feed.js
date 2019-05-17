@@ -1,8 +1,12 @@
 import React, { Component } from "react"
-import { Button } from 'antd'
+import { Button, notification } from 'antd'
 import '../Style/Feed.css'
 import GroupModal from './GroupModal'
 import axios from 'axios'
+
+const redirectLogin = () => {
+  window.location = '/signin'
+}
 
 class Feed extends Component {
   state = {
@@ -22,23 +26,38 @@ class Feed extends Component {
     const form = this.formRef.props.form;
     form.validateFields()
       .then((group) => {
-        form.resetFields() 
+        form.resetFields()
         this.hideModal()
 
-        axios.post('http://localhost:8000/api/v1/groups', {
-          name: group.name,
+        axios.post(`http://localhost:8000/api/v1/groups?${document.cookie}`, {
+          name: group.name
         })
         .then((res) => {
-          console.log(res.data)
-          if (Object.keys(res.data).length !== 0 && res.data.constructor === Object) {
-            console.log(res.data)
-            //window.location = "/group/{res.data.id}"
-          } else {
-            //window.location = "/signin"
-          }
+          notification['success']({
+            message: 'Success',
+            description: 'The group was created!',
+            duration: 2.5,
+            onClose: setTimeout(function redirect() {
+              window.location = `/groups/${res.data.group.id}`
+            }, 3000)
+          })
         })
         .catch(err => {
-          console.log('Error')
+          let res  = JSON.parse(err.request.response)
+          for (const field in res) {
+            if (/token/i.test(res[field])) {
+              notification['error']({
+                message: field.charAt(0).toUpperCase() + field.slice(1),
+                description: 'You are not logged in',
+                onClose: redirectLogin
+              })
+            } else {
+              notification['error']({
+                message: field.charAt(0).toUpperCase() + field.slice(1),
+                description: res[field]
+              })
+            }
+          }
         })
       })
   }
@@ -62,7 +81,7 @@ class Feed extends Component {
     return (
       <div>
         <Button type="primary" size="large" block onClick={this.showModal}>Create Group</Button>
-        <GroupModal 
+        <GroupModal
           wrappedComponentRef={this.saveFormRef}
           visible={this.state.modalVisible}
           onCancel={this.hideModal}
