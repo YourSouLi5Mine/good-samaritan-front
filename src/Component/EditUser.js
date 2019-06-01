@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Form, Icon, Input, Button, Typography, notification } from 'antd'
+import { Form, Icon, Input, Button, Typography, notification, Row, Col } from 'antd'
 import '../Style/EditUser.css'
 import axios from 'axios'
 
@@ -54,7 +54,7 @@ class EditUser extends Component {
 
   setInitialValues = () => {
     const { form } = this.props;
-    axios.get(`http://localhost:8000/api/v1/users/edit?${document.cookie}`)
+    axios.get(`http://localhost:8000/api/v1/user/edit?${document.cookie}`)
     .then((res) => {
       var res_email = res.data.user.email
       var res_username = res.data.user.username
@@ -82,33 +82,35 @@ class EditUser extends Component {
     const { getFieldDecorator } = this.props.form
 
     return (
-      <div>
-        <Title>Edit </Title>
-        <Form onSubmit={this.handleSubmit} className="edit-user-form">
-          <Form.Item>
-            {getFieldDecorator('email', {
-              rules: [{required: true, message: 'Please input an email'}],
+      <Row>
+        <Col xs={{span: 20, offset: 2}} md={{span: 4, offset: 10}}>
+          <Title>Edit </Title>
+          <Form onSubmit={this.handleSubmit} className="edit-user-form">
+            <Form.Item>
+              {getFieldDecorator('email', {
+                rules: [{required: true, message: 'Please input an email'}],
+                })(
+              <Input prefix={<Icon className="icon" type="mail" />} placeholder="Email" />
+                )}
+            </Form.Item>
+            <Form.Item>
+              {getFieldDecorator('username', {
+                rules: [{ required: true, message: 'Please input an username' }],
               })(
-            <Input prefix={<Icon className="icon" type="mail" />} placeholder="Email" />
+                <Input prefix={<Icon className="icon" type="user" />} placeholder="Username" />
               )}
-          </Form.Item>
-          <Form.Item>
-            {getFieldDecorator('username', {
-              rules: [{ required: true, message: 'Please input an username' }],
-            })(
-              <Input prefix={<Icon className="icon" type="user" />} placeholder="Username" />
-            )}
-          </Form.Item>
-          <Form.Item>
-            {getFieldDecorator('password', {
-              rules: [{ required: true, message: 'Please input your Password!' }],
-            })(
-              <Input type="password" prefix={<Icon className="icon" type="lock" />} placeholder="Password" />
-            )}
-          </Form.Item>
-          <Button htmlType="submit">Save</Button>
-        </Form>
-      </div>
+            </Form.Item>
+            <Form.Item>
+              {getFieldDecorator('password', {
+                rules: [{ required: true, message: 'Please input your Password!' }],
+              })(
+                <Input type="password" prefix={<Icon className="icon" type="lock" />} placeholder="Password" />
+              )}
+            </Form.Item>
+            <Button htmlType="submit">Save</Button>
+          </Form>
+        </Col>
+      </Row>
     )
   }
 }
