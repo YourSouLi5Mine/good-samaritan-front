@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Button, notification } from 'antd'
+import { Button, notification, Row, Col } from 'antd'
 import '../Style/Feed.css'
 import GroupModal from './GroupModal'
 import axios from 'axios'
@@ -83,16 +83,18 @@ class Feed extends Component {
 
   render() {
     return (
-      <div>
-        <Button type="primary" size="large" block onClick={this.showModal}>Create Group</Button>
-        <Button type="primary" size="large" block onClick={this.editUser}>Edit User</Button>
-        <GroupModal
-          wrappedComponentRef={this.saveFormRef}
-          visible={this.state.modalVisible}
-          onCancel={this.hideModal}
-          onCreate={this.handleSubmit}
-        />
-      </div>
+      <Row>
+        <Col xs={{span: 20, offset: 2}} md={{span: 4, offset: 10}}>
+          <Button type="primary" size="large" block onClick={this.showModal}>Create Group</Button>
+          <Button type="primary" size="large" block onClick={this.editUser}>Edit User</Button>
+          <GroupModal
+            wrappedComponentRef={this.saveFormRef}
+            visible={this.state.modalVisible}
+            onCancel={this.hideModal}
+            onCreate={this.handleSubmit}
+          />
+        </Col>
+      </Row>
     )
   }
 }
