@@ -5,6 +5,7 @@ import SignIn from './Component/SignIn';
 import Feed from './Component/Feed';
 import GroupFeed from './Component/GroupFeed';
 import EditUser from './Component/EditUser';
+import Dashboard from './Component/Dashboard';
 
 function AppRouter() {
   return (
@@ -15,6 +16,7 @@ function AppRouter() {
         <AuthenticatedRoute path="/feed" component={Feed} />
         <AuthenticatedRoute path="/groups/:id" component={GroupFeed} />
         <AuthenticatedRoute path="/user/edit" component={EditUser} />
+        <AuthenticatedRoute path="/dashboard" component={Dashboard} />
         <Route component={NoMatch} />
       </Switch>
     </Router>
