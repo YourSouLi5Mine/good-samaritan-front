@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { addPost } from "../Redux/Actions/index";
 import '../Style/Post.css'
 import axios from 'axios'
+import Pusher from 'pusher-js'
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -12,6 +13,22 @@ function mapDispatchToProps(dispatch) {
 }
 
 class PostForm extends Component {
+  componentDidMount() {
+    const { addPost } = this.props
+    Pusher.logToConsole = true;
+
+    const pusher = new Pusher('28007b6ee133135e5fdf', {
+      cluster: 'us3',
+      forceTLS: true
+    })
+
+    const channel = pusher.subscribe(`group.${this.props.groupId}`)
+    channel.bind('group_event', function(data) {
+      addPost(data.post)
+    })
+
+  }
+
   handleSubmit = (e) => {
     e.preventDefault()
     this.validateFields()
@@ -24,7 +41,6 @@ class PostForm extends Component {
             message: 'Success',
             description: 'The post was created!'
           })
-          this.props.addPost(res.data.post);
         })
         .catch(err => {
           let res  = JSON.parse(err.request.response)

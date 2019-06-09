@@ -5,7 +5,6 @@ import List from "./List";
 
 import '../Style/GroupFeed.css';
 
-
 class GroupFeed extends Component {
   render() {
     return (
