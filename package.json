@@ -6,7 +6,7 @@
     "antd": "^3.16.3",
     "axios": "^0.18.0",
     "customize-cra": "^0.2.12",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "pusher-js": "^4.4.0",
     "react": "^16.8.6",
     "react-app-rewired": "^2.1.1",
